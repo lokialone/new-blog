@@ -3,6 +3,7 @@ import { Link } from 'gatsby';
 import Layout from '../components/layout';
 import usePosts from '../hooks/usePosts';
 import PostPreview from '../components/post-preview';
+import FullScreenImage from '../components/FullScreenImage';
 export default () => {
     const posts = usePosts();
     
@@ -10,6 +11,7 @@ export default () => {
     <Layout>
         <div>HI Frontend Masters!</div>
         <Link to="/about">to about &rarr;</Link>
+        <FullScreenImage />
         <h2> read my blog</h2>
         {
             posts.map(post => (

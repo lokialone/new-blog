@@ -16,9 +16,6 @@ const Layout = ({ children }) => {
             }
 
             /* More info: https://bit.ly/2PsCnzk */
-            * + * {
-            margin-top: 1rem;
-            }
 
             html,
             body {
