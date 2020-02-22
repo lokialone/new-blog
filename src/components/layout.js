@@ -3,74 +3,76 @@ import { Global, css } from '@emotion/core';
 import Header from './header';
 import Helmet from 'react-helmet';
 import useSiteMetadata from '../hooks/useSiteMetadata';
-const Layout = ({ children }) => {
-    const { title, description } = useSiteMetadata();
-    
-    return (
+const Layout = ({ render, children }) => {
+  const { title, description } = useSiteMetadata();
+
+  return (
     <>
-        <Global
+      <Global
         styles={css`
-            * {
+          * {
             box-sizing: border-box;
             margin: 0;
-            }
+          }
 
-            /* More info: https://bit.ly/2PsCnzk */
+          /* More info: https://bit.ly/2PsCnzk */
 
-            html,
-            body {
+          html,
+          body {
             margin: 0;
             color: #555;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-                Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-                'Segoe UI Symbol';
+              Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+              'Segoe UI Emoji', 'Segoe UI Symbol';
             font-size: 18px;
             line-height: 1.4;
 
             /* remove margin for the main div that Gatsby mounts into */
             > div {
-                margin-top: 0;
+              margin-top: 0;
             }
-            }
+          }
 
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6 {
+          h1,
+          h2,
+          h3,
+          h4,
+          h5,
+          h6 {
             color: #222;
             line-height: 1.1;
 
             + * {
-                margin-top: 0.5rem;
+              margin-top: 0.5rem;
             }
-            }
+          }
 
-            strong {
+          strong {
             color: #222;
-            }
+          }
 
-            li {
+          li {
             margin-top: 0.25rem;
-            }
+          }
         `}
-        />
-        <Helmet>
-            <html lang="en" />
-            <title>{title}</title>
-            <meta name="description" content={description}></meta>
-        </Helmet>
-        <Header />
-        <main
+      />
+      <Helmet>
+        <html lang="en" />
+        <title>{title}</title>
+        <meta name="description" content={description}></meta>
+      </Helmet>
+      <Header />
+      {render && render()}
+      <main
         css={css`
-            margin: 2rem auto;
-            max-width: 550px;
+          margin: 2rem auto;
+          max-width: 550px;
         `}
-        >
+      >
         {children}
-        </main>
-    </>)
+      </main>
+    </>
+  );
 };
 
 export default Layout;

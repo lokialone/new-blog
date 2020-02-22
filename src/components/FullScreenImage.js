@@ -4,10 +4,10 @@ import { Link, graphql, useStaticQuery } from 'gatsby';
 import BackgroundImage from 'gatsby-background-image';
 
 const ImageBackground = styled(BackgroundImage)`
-  background-position: top 20% center;
   background-size: cover;
-  height: 50vh;
-
+  height: 100vh;
+  width: 100wh;
+  margin-top: -55px;
   /* override the default margin for sibling elements  */
   + * {
     margin-top: 0;
@@ -15,28 +15,14 @@ const ImageBackground = styled(BackgroundImage)`
 `;
 
 const TextBox = styled('div')`
-  background-image: linear-gradient(to top, #ddbbffdd 2rem, #ddbbff00);
   display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: flex-end;
-  padding: 0 calc((100vw - 550px) / 2) 2rem;
+  font-size: 28px;
   width: 100%;
-
-  h1 {
-    text-shadow: 1px 1px 3px #eeddff66;
-    font-size: 2.25rem;
-  }
-
-  p,
-  a {
-    color: #222;
-    margin-top: 0;
-  }
-
-  a {
-    margin-top: 0.5rem;
-  }
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  color: white;
 `;
 
 const Hero = () => {
@@ -44,8 +30,8 @@ const Hero = () => {
     {
       image: file(relativePath: { eq: "bg.jpg" }) {
         sharp: childImageSharp {
-          fluid {
-            src
+          fluid(maxWidth: 1000, quality: 100) {
+            ...GatsbyImageSharpFluid
           }
         }
       }
@@ -55,11 +41,11 @@ const Hero = () => {
   // console.log('image', image);
 
   return (
-    <ImageBackground
-      Tag="section"
-      fluid={image.sharp.fluid}
-      fadeIn="soft"
-    ></ImageBackground>
+    <ImageBackground Tag="section" fluid={image.sharp.fluid} fadeIn="soft">
+      <TextBox>
+        <div>Hello world ~</div>
+      </TextBox>
+    </ImageBackground>
   );
 };
 

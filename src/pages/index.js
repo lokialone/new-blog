@@ -5,18 +5,14 @@ import usePosts from '../hooks/usePosts';
 import PostPreview from '../components/post-preview';
 import FullScreenImage from '../components/FullScreenImage';
 export default () => {
-    const posts = usePosts();
-    
-    return (
-    <Layout>
-        <div>HI Frontend Masters!</div>
-        <Link to="/about">to about &rarr;</Link>
-        <FullScreenImage />
-        <h2> read my blog</h2>
-        {
-            posts.map(post => (
-                <PostPreview key={post.slug} post={post}></PostPreview>
-            ))
-        }
+  const posts = usePosts();
+
+  return (
+    <Layout render={FullScreenImage}>
+      <h2> read my blog</h2>
+      {posts.map(post => (
+        <PostPreview key={post.slug} post={post}></PostPreview>
+      ))}
     </Layout>
-)}
+  );
+};
