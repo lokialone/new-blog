@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import { Link } from 'gatsby';
 import { throttle } from 'lodash';
-
+import useScrollAtTop from '../hooks/useScrollAtTop';
 const NavLink = styled(Link)`
   color: white;
   font-size: 14px;
@@ -37,35 +37,17 @@ const HeaderStyle = styled.div`
   transition: all 1s ease-out;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 `;
-const Header = () => {
-  const [backgroundColor, setBackgroundColor] = useState('transparent');
-  const scrollFn = () => {
-    if (
-      document.body.scrollTop !== 0 ||
-      document.documentElement.scrollTop !== 0
-    ) {
-      setBackgroundColor('#2f4154');
-    } else {
-      setBackgroundColor('transparent');
-    }
-  };
-  const throtteFn = throttle(scrollFn, 1000);
-  useEffect(() => {
-    window.addEventListener('scroll', throtteFn);
-    return () => {
-      window.removeEventListener('scroll', throtteFn);
-    };
-  }, []);
 
+const Header = () => {
+  const isAtTop = useScrollAtTop(true);
   return (
-    <HeaderStyle background={backgroundColor}>
+    <HeaderStyle background={isAtTop ? 'transparent' : '#2f4154'}>
       <div
         css={css`
           color: white;
           font-size: 1.25rem;
           text-decoration: none;
           margin-left: 12px;
-
           display: inline-block;
         `}
       >
