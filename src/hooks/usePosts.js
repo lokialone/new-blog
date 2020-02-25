@@ -9,6 +9,15 @@ const usePosts = () => {
             title
             slug
             author
+            date
+
+            image {
+              sharp: childImageSharp {
+                fluid(maxWidth: 400, quality: 100) {
+                  ...GatsbyImageSharpFluid
+                }
+              }
+            }
           }
           excerpt
         }
@@ -20,6 +29,8 @@ const usePosts = () => {
     author: post.frontmatter.author,
     slug: post.frontmatter.slug,
     excerpt: post.excerpt,
+    image: post.frontmatter.image,
+    date: post.frontmatter.date,
   }));
 };
 
