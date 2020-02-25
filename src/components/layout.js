@@ -21,9 +21,7 @@ const Layout = ({ render, children }) => {
           body {
             margin: 0;
             color: #555;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-              Helvetica, Arial, sans-serif, 'Apple Color Emoji',
-              'Segoe UI Emoji', 'Segoe UI Symbol';
+            font-family: 'Roboto', sans-serif;
             font-size: 18px;
             line-height: 1.4;
 
@@ -33,18 +31,9 @@ const Layout = ({ render, children }) => {
             }
           }
 
-          h1,
-          h2,
-          h3,
-          h4,
-          h5,
-          h6 {
-            color: #222;
-            line-height: 1.1;
-
-            + * {
-              margin-top: 0.5rem;
-            }
+          h3 {
+            font-size: 24px;
+            font-weight: bold;
           }
 
           strong {
@@ -65,8 +54,11 @@ const Layout = ({ render, children }) => {
       {render && render()}
       <main
         css={css`
-          margin: 2rem auto;
-          max-width: 550px;
+          margin: 2rem 10%;
+          box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24),
+            0 17px 50px 0 rgba(0, 0, 0, 0.19) !important;
+          border-radius: 8px;
+          padding: 48px 32px;
         `}
       >
         {children}

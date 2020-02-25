@@ -10,7 +10,6 @@ const usePosts = () => {
             slug
             author
             date
-
             image {
               sharp: childImageSharp {
                 fluid(maxWidth: 400, quality: 100) {
