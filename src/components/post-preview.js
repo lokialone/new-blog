@@ -43,12 +43,21 @@ const PostPreview = ({ post }) => (
       <div
         css={css`
           margin-left: 32px;
-          font-sise: 12px;
+          font-size: 16px;
           font-weight: 300;
+          overflow: hidden;
+          flex: 1;
         `}
       >
         <h3>{post.title}</h3>
-        <div>{post.excerpt}</div>
+        <div
+          css={css`
+            margin-top: 16px;
+          `}
+        >
+          {post.excerpt}
+        </div>
+        <div>{} </div>
       </div>
     </Link>
   </article>

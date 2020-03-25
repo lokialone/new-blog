@@ -58,7 +58,7 @@ const Layout = ({ render, children }) => {
           box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24),
             0 17px 50px 0 rgba(0, 0, 0, 0.19) !important;
           border-radius: 8px;
-          padding: 48px 32px;
+          padding: 48px 60px;
         `}
       >
         {children}

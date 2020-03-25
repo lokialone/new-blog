@@ -9,7 +9,6 @@ export default () => {
 
   return (
     <Layout render={FullScreenImage}>
-      <h2> read my blog</h2>
       {posts.map(post => (
         <PostPreview key={post.slug} post={post}></PostPreview>
       ))}

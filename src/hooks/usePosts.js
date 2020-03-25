@@ -19,6 +19,7 @@ const usePosts = () => {
             }
           }
           excerpt
+          html
         }
       }
     }

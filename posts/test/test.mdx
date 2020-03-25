@@ -2,9 +2,117 @@
 title: 一道快速考察 Python 基础的
 slug: hello world  --- 
 author: lokialone
-excerpt: xxxxxxxxxxxx1
 date: 2020-01-29
 image: images/sea.jpg
 ---
 ![Globe](images/sea.jpg)
-this is my first blog
+## 不具响应式的封装
+
+在做业务过程中，常常会需要用到localstrorage.  基本也是使用 [store  -  npm](https://www.npmjs.com/package/store) 兼容性也不错，但常常会出现很多如下代码。
+
+```javascript
+import store from store;
+const key = 'xxxx'
+
+export function getUsername() {
+	return store.get(key);
+}
+
+export function setUsername(v) {
+	return store.set(key, v);
+}
+
+```
+
+整个文件的意义，只是一个表格而已，做个简单的映射。 为了去除这种模式的代码。脑子想的是proxy的特性。尝试了一下，做出如下改造
+```javascript
+import store from 'store';
+const preFix = 'LK';
+const proxy = new Proxy({}, {
+        get: function (target,  property ) {
+            return store.get(`${preFix}${property}`);
+        },
+        set: function ( target, property, value) {
+   		  return store.set(`${preFix}${property}`, value);
+        }
+    })
+export default proxy;
+
+```
+
+使用的时候，直接 proxy.username 就好了，不需要再重复的写 getXX, setXX方法。看着挺美好，但之前的方式有个优势是，多人使用的时候，能够知道有哪些 数据是已经被存储使用了。改进后的方法，使用起来方便了一些，但少了一些限制。故做出如下修改:
+```javascript
+import store from 'store';
+const localStorage = {
+		username: ''
+};
+export function createProxy(localStorage, preFix='LK_SOUCHE_') {
+    *// localStorage里声明的才可以使用，达到不瞎搞的目的*
+    return new Proxy(localStorage, {
+        get: function (target, property ) {
+            if (!Reflect.has(target, property)) {
+                throw new Error(`请先在localStorge对象里初始化${property}`)
+            }
+            return store.get(`${preFix}${property}`);
+        },
+        set: function (target, property, value) {
+    
+            if (!Reflect.has(target, property)) {
+                throw new Error(`请先在localStorge对象里初始化${property}`)
+            }
+            return store.set(`${preFix}${property}`, value);
+        }
+    })
+}
+const proxy = createProxy(localStorage);
+export default proxy;
+```
+
+使用Reflect 判断对象的属性是否被声明过，防止直接proxy.username方式的使用。
+
+## 加入响应式特性
+store 存储的数据不具备响应式特性，但在很多业务场景时，我们需要更改store的数据，同时组件要根据store的变更来改变状态。这个时候我们是无法直接监听到store数据的变更的，为此我们需要引入一个另一个具备响应式的中间变量来做这个事情。为了减少在业务直接出现这些多余变量，使用vue对象来封装 store.
+
+```javascript
+
+import Vue from 'vue';
+import { isEmpty } from 'ramda';
+import { createProxy } from './index';
+const localStorage = {
+    tableHeadExtra: [],
+}
+
+const proxy = createProxy(localStorage); //上文出现过的函数
+
+//生成响应式的中间变量
+function createVueData() {
+    return Object.keys(localStorage).reduce((*acc*, *key*) => {
+        acc[`${key}Data`] = localStorage[key];
+        return acc;
+    }, {});
+}
+//通过中间变量的
+const createComputed = () => {
+    return Object.keys(localStorage).reduce((acc, key) => {
+        acc[key] = {
+            set(v) {
+                this[`${key}Data`] = v;
+                proxy[key] = v; 
+            },
+            get() {
+                return isEmpty(this[`${key}Data`]) ? proxy[key] : this[`${key}Data`];
+            }
+        }
+        return acc;
+    }, {})
+}
+const store = new Vue({
+    data: createVueData(),
+    computed: createComputed()
+});
+
+Object.freeze(store);
+export default store;
+
+```
+Object.freeze的目 也是为了防止随意添加数据， 而数据不会具有响应式特性，减少这个误用。
